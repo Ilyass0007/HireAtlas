@@ -73,4 +73,50 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public ApplicationResponse updateApplicationStatus(Long id, String status) {
+        Application app = applicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        app.setStatus(status);
+        Application updated = applicationRepository.save(app);
+        return toDto(updated);
+    }
+    @Override
+    public void deleteApplication(Long id) {
+        if (!applicationRepository.existsById(id)) {
+            throw new RuntimeException("Application not found");
+        }
+        applicationRepository.deleteById(id);
+    }
+    @Override
+    public ApplicationResponse getApplicationById(Long id) {
+        var application = applicationRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        return new ApplicationResponse(
+            application.getId(),
+            application.getUser().getId(),
+            application.getJob().getId(),
+            application.getStatus(),
+            application.getCvPath(),
+            application.getAppliedAt()
+        );
+    }
+    @Override
+    public List<ApplicationResponse> getAllApplications() {
+        return applicationRepository.findAll().stream()
+            .map(application -> new ApplicationResponse(
+                application.getId(),
+                application.getUser().getId(),
+                application.getJob().getId(),
+                application.getStatus(),
+                application.getCvPath(),
+                application.getAppliedAt()
+            ))
+            .toList();
+    }
+    
+
 }

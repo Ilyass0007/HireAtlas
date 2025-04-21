@@ -33,4 +33,32 @@ public class ApplicationController {
     public List<ApplicationResponse> getByJob(@PathVariable Long jobId) {
         return applicationService.getApplicationsByJob(jobId);
     }
+
+    // GET all applications
+    @GetMapping
+    public List<ApplicationResponse> getAllApplications() {
+        return applicationService.getAllApplications();
+    }
+
+    // GET application by ID
+    @GetMapping("/{id}")
+    public ApplicationResponse getApplicationById(@PathVariable Long id) {
+        return applicationService.getApplicationById(id);
+    }
+
+    // PUT update status
+    @PutMapping("/{id}/status")
+    public ApplicationResponse updateStatus(
+            @PathVariable Long id,
+            @RequestBody String status // You can make a DTO for this too
+    ) {
+        return applicationService.updateApplicationStatus(id, status);
+    }
+
+    // DELETE application
+    @DeleteMapping("/{id}")
+    public void deleteApplication(@PathVariable Long id) {
+        applicationService.deleteApplication(id);
+    }
+
 }

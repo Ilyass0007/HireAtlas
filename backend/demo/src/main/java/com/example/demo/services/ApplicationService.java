@@ -9,4 +9,9 @@ public interface ApplicationService {
     ApplicationResponse applyToJob(ApplicationRequest request, Long userId);
     List<ApplicationResponse> getApplicationsByUser(Long userId);
     List<ApplicationResponse> getApplicationsByJob(Long jobId);
+    List<ApplicationResponse> getAllApplications();
+    ApplicationResponse getApplicationById(Long id);
+    ApplicationResponse updateApplicationStatus(Long id, String status);
+    void deleteApplication(Long id);
+
 }
