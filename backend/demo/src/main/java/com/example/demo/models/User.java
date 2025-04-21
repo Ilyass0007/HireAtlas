@@ -1,12 +1,13 @@
 package com.example.demo.models;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class User {
     
-    @Id
+    @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -15,7 +16,16 @@ public class User {
     private String password;
     private String role; // "job_seeker", "employer", or "admin"
 
-    // Constructors
+    // ——— NEW RELATIONSHIPS ———
+    // If this User is an employer, list their jobs:
+    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL)
+    private List<Job> jobs;
+
+    // If this User is a job seeker, list their applications:
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Application> applications;
+    // ————————————————————————
+
     public User() {}
 
     public User(String fullName, String email, String password, String role) {
@@ -25,40 +35,25 @@ public class User {
         this.role = role;
     }
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    // ——— Getters & Setters ———
 
-    public String getFullName() {
-        return fullName;
-    }
+    public Long getId() { return id; }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public List<Job> getJobs() { return jobs; }
+    public void setJobs(List<Job> jobs) { this.jobs = jobs; }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+    public List<Application> getApplications() { return applications; }
+    public void setApplications(List<Application> applications) { this.applications = applications; }
 }

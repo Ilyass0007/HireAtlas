@@ -1,7 +1,10 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.User;
-import com.example.demo.repositories.UserRepository;
+import com.example.demo.dto.auth.LoginRequest;
+import com.example.demo.dto.auth.RegisterRequest;
+import com.example.demo.dto.auth.UserResponse;
+import com.example.demo.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,24 +13,15 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody User user) {
-        return userRepository.save(user);
+    public UserResponse register(@RequestBody @Valid RegisterRequest request) {
+        return userService.register(request);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User loginUser) {
-        User user = userRepository.findAll().stream()
-            .filter(u -> u.getEmail().equals(loginUser.getEmail()) && u.getPassword().equals(loginUser.getPassword()))
-            .findFirst()
-            .orElse(null);
-
-        if (user != null) {
-            return "Login successful for user: " + user.getFullName();
-        } else {
-            return "Invalid email or password!";
-        }
+    public UserResponse login(@RequestBody @Valid LoginRequest request) {
+        return userService.login(request);
     }
 }
